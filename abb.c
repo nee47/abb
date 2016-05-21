@@ -23,7 +23,6 @@ struct abb{
 };
 
 struct abb_iter{
-  abb_nodo_t* actual;
   pila_t* pila;
   const abb_t* abb;
 };
@@ -102,25 +101,22 @@ abb_nodo_t** min(abb_nodo_t** arbol, abb_comparar_clave_t cmp){ //2 //3
 
 // caso 1 borrar hoja
 // funciona nueva borra un nodo que notiene hijos 
-void* caso_1(abb_nodo_t** arbol){
-  void* dato_salida;
-  dato_salida = (*arbol)->dato;
+void caso_1(abb_nodo_t** arbol){
   free((*arbol)->clave);
   free(*arbol);
   *arbol = NULL;
-  return dato_salida;
 }
 
 void swap(abb_nodo_t* arbol1, abb_nodo_t* arbol2){
   void* dato_aux = arbol1->dato;
-  char* clave_aux = strdup(arbol1->clave);
+  char* clave_aux = arbol1->clave;
   arbol1->dato = arbol2->dato;
-  free(arbol1->clave);
-  arbol1->clave = strdup(arbol2->clave);
+  //free(arbol1->clave);
+  arbol1->clave = arbol2->clave;
   arbol2->dato = dato_aux;
-  free(arbol2->clave);
-  //arbol2->clave = strdup(clave_aux);
-  free(clave_aux);
+  arbol2->clave = clave_aux;
+  // free(arbol2->clave);
+  //free(clave_aux);
 }
 // Funcion del 2do caso de borrado (el arbol tiene hijo derecho o hijo izquierdo).
 // Recibe puntero al arbol y un abb 
@@ -133,6 +129,7 @@ void* caso_2(abb_nodo_t** arbol, abb_t* abb){
     (*arbol)->izquierda = (*arbol)->derecha->izquierda; 
     abb_nodo_t* cis = (*arbol)->derecha;
     (*arbol)->derecha = cis->derecha;
+    free(cis->clave);
     free(cis);
     abb->cantidad_nodos--;
     return dato_salida;
@@ -143,6 +140,7 @@ void* caso_2(abb_nodo_t** arbol, abb_t* abb){
     swap(*arbol, (*arbol)->izquierda);
     abb_nodo_t* nodo_a_borrar = (*arbol)->izquierda;
     (*arbol)->izquierda = nodo_a_borrar->izquierda;
+    free(nodo_a_borrar->clave);
     free(nodo_a_borrar);
     abb->cantidad_nodos--;
     return dato_salida;
@@ -162,7 +160,7 @@ void *abb_borrar(abb_t *abb, const char *clave){
     caso_1(arbol);
     abb->cantidad_nodos--;
     return dato_salida;
-  }
+    }
   
   /* segundo caso : 1 hijo */
   if(!(*arbol)->derecha || !(*arbol)->izquierda){
@@ -171,16 +169,9 @@ void *abb_borrar(abb_t *abb, const char *clave){
   }
   /* tercer caso : 2 hijos  */
   if((*arbol)->derecha && (*arbol)->izquierda){
-    //dato_salida = (*arbol)->dato;
     abb_nodo_t** minimo = min(&(*arbol)->derecha, abb-> cmp);
     swap(*arbol, *minimo);
-    if((*arbol)->derecha == *minimo) {
-      abb_nodo_t* derecha_padre_minimo = (*arbol)->derecha->derecha;
-      free(*minimo);
-      (*arbol)->derecha = derecha_padre_minimo;
-      abb->cantidad_nodos--;
-      return dato_salida;
-    }
+    free((*minimo)->clave);
     abb_nodo_t* derecha_minimo = (*minimo)->derecha; 
     abb_nodo_t* nodo_a_borrar = (*minimo);
     (*minimo)->derecha = (*arbol)->derecha;
@@ -235,6 +226,7 @@ void apilar_nodos(abb_iter_t* iter, abb_nodo_t* arbol){
 
 // Crea iterador
 abb_iter_t *abb_iter_in_crear(const abb_t *abb){
+  printf("NUEVA VERSION COME MIERDA \n\n");
   abb_iter_t* iter = malloc(sizeof(abb_iter_t));
   if (!iter) return NULL;
   iter->abb = abb;
