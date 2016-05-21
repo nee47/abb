@@ -1,0 +1,102 @@
+#include <stdlib.h>
+#include <string.h>
+#include "abb.h"
+#include <stdio.h>
+#include "testing.h"
+
+int comparar(const char* cadena1, const char* cadena2){
+  int cad1, cad2;
+  cad1 = strtol(cadena1, NULL, 10);
+  cad2 = strtol(cadena2, NULL, 10);
+  if(cad1 > cad2) return 1;
+  if(cad1 < cad2) return -1;
+  else return 0;
+}
+
+void pruebas(){ 
+  abb_t* abb = abb_crear(NULL, comparar);
+  int a = 12, b = 4, c= 22, d = 17;
+  char* c1 = "12";
+  char* c2 = "4";
+  char* c3 = "22";
+  char* c4 = "17";
+  char* c5 = "35";
+  abb_guardar(abb, c1, &a);
+  abb_guardar(abb, c2, &b);
+  abb_guardar(abb, c3, &c);
+  abb_guardar(abb, c4, &d);
+  //  abb_guardar(abb, c4, &a);
+  
+
+  printf("CANTIDA NODOS %u \n", abb_cantidad(abb));
+  
+  if (abb_pertenece(abb, c1)) printf("PERTENCE  c1  \n");
+  else (printf("NO PETERNECE  \n"));
+  
+  if (abb_pertenece(abb, c2)) printf("PERTENCE  c2  \n");
+  else (printf("NO PETERNECE  \n"));
+
+  if (abb_pertenece(abb, c3)) printf("PERTENCE  c3  \n");
+  else (printf("NO PETERNECE  \n"));
+
+  if (abb_pertenece(abb, c4)) printf("PERTENCE  c4  \n");
+  else (printf("NO PETERNECE  \n"));
+
+  if (abb_pertenece(abb, c5)) printf("PERTENCE  c5  \n");
+  else (printf("NO PETERNECE  \n"));
+
+  //  abb_guardar(abb, c1, & );
+  
+  int* ob1 = abb_obtener(abb, c1);
+  printf("obtener c1 es  %d \n", *ob1);
+
+  ob1 = abb_obtener(abb, c2);
+  printf("obtener c2 es  %d \n", *ob1);
+
+  ob1 = abb_obtener(abb, c3);
+  printf("obtener c3 es  %d \n", *ob1);
+
+  ob1 = abb_obtener(abb, c4);
+  printf("obtener c4 es  %d \n", *ob1);
+
+  ob1 = abb_obtener(abb, c5);
+  printf("obtener c5 es  %p \n", ob1); // aca imprimo el puntero porque es NULL
+  //  int* capa ;
+  /*
+  capa = abb_borrar(abb, c1);
+  printf("borrar c1 vale   es la raiz %d \n", *capa);
+  printf("cantidad nodos es %u \n", abb_cantidad(abb));
+  if (abb_pertenece(abb, c1)) printf("PERTENCE  c1  \n");
+  else (printf("NO PETERNECE  \n"));
+  
+    
+  capa = abb_borrar(abb, c4);
+  printf("borrar c4 vale   es la raiz %d \n", *capa);
+  printf("cantidad nodos es %u \n", abb_cantidad(abb));
+  if (abb_pertenece(abb, c4)) printf("PERTENCE  c4  \n");
+  else (printf("NO PETERNECE  \n"));
+   
+  capa = abb_borrar(abb, c3);
+  printf("borrar c3 vale   es la raiz %d \n", *capa);
+  printf("cantidad nodos es %u \n", abb_cantidad(abb));
+  if (abb_pertenece(abb, c3)) printf("PERTENCE  c3  \n");
+  else (printf("NO PETERNECE  \n"));
+
+  capa = abb_borrar(abb, c2);
+  printf("borrar c2 vale   es la raiz %d \n", *capa);
+  printf("cantidad nodos es %u \n", abb_cantidad(abb));
+  if (abb_pertenece(abb, c2)) printf("PERTENCE  c2  \n");
+  else (printf("NO PETERNECE  \n"));
+  */
+  print_test("oe ka", true);
+  abb_destruir(abb);
+}
+
+
+
+
+int main(){
+  pruebas();
+
+  return 0;
+}
