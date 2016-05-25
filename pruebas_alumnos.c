@@ -6,6 +6,7 @@
 #include "testing.h"
 #include <time.h>
 #define TAM 40000
+#define pt print_test
 
 int comparar(const char* cadena1, const char* cadena2){
   long int cad1, cad2;
