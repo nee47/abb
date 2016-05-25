@@ -98,10 +98,10 @@ abb_nodo_t** min(abb_nodo_t** arbol, abb_comparar_clave_t cmp){ //2 //3
   return aux;
 }
 
-void borrar_nodo(abb_nodo_t** nodo){
-  free((*nodo)->clave);
-  free(*nodo);
-  *nodo = NULL;
+void borrar_nodo(abb_nodo_t* nodo){
+  free(nodo->clave);
+  free(nodo);
+  //*nodo = NULL;
 }
 
 void swap(abb_nodo_t* arbol1, abb_nodo_t* arbol2){
@@ -116,15 +116,9 @@ void swap(abb_nodo_t* arbol1, abb_nodo_t* arbol2){
 // caso 1 borrar hoja
 // funciona nueva borra un nodo que notiene hijos 
 bool eliminar_hoja(abb_nodo_t** arbol, abb_nodo_t** padre_nodo){
-  
-    printf("eliminar hohja\n");
-    /*if (*padre_nodo == *arbol ) {//swap();  
-    swap((*padre_nodo)->derecha ? (*padre_nodo)->derecha : (*padre_nodo)->izquierda, *arbol);
-    borrar_nodo(arbol);
-    return true;
-    }*/
   if(!(*arbol)->derecha && !(*arbol)->izquierda){
-    borrar_nodo(arbol);
+    borrar_nodo(*arbol);
+    *arbol = NULL;
     return true;
   }
   return false;
@@ -156,40 +150,32 @@ abb_nodo_t** arbol_p(abb_nodo_t** arbol, const char* clave, abb_comparar_clave_t
 // Recibe puntero al arbol y un abb 
 // Contempla los 2 casos y devuelve el dato asociado a la clave .  
 bool acomodar_caso2(abb_nodo_t** arbol, abb_t* abb, abb_nodo_t** padre){
+  abb_nodo_t** aux;
+  //abb_nodo_t* nodo_a_borrar;
+  if(*arbol == *padre)   aux = &abb->raiz;
+  else aux = padre;
+  abb_nodo_t* nodo_a_borrar = *arbol ;
   if((*arbol)->derecha && !(*arbol)->izquierda) { /* 3er caso   */
-    
-    printf("arbol derecha && !arbol izqueirda\n");
     abb_nodo_t* derecha = (*arbol)->derecha;
-    if(abb->cmp((*arbol)->clave, (*padre)->derecha->clave)==0 ){
-      printf("arbol igual a padre \n");
-      if(!(*arbol)->derecha->derecha){// (borrar)->()->()
-	if((*arbol)->derecha->izquierda){
-	  swap(*padre, (*arbol)->derecha->izquierda);	  
-	}
-	else swap(*padre, (*arbol)->derecha);
-      }
-      (*padre)->derecha = derecha;
+    if((*padre)->derecha && (*arbol)->clave == (*padre)->derecha->clave ){
+      (*aux)->derecha = derecha;
+      //borrar_nodo(*arbol);
     }
-    else (*padre)->izquierda = derecha;
-    //free((*arbol)->clave);
-    //free((*arbol));
+    else if((*padre)->izquierda && (*arbol)->clave == (*padre)->izquierda->clave ) (*padre)->izquierda = derecha;
+    else *aux = derecha;
+    borrar_nodo(nodo_a_borrar);
     abb->cantidad_nodos--;
     return true;
   }
   
   if (!(*arbol)->derecha && (*arbol)->izquierda){
-    printf("!arbol derecha && arbol izqueirda\n");
     abb_nodo_t* izquierda = (*arbol)->izquierda;
-    if(abb->cmp((*arbol)->clave, (*padre)->izquierda->clave)==0){
-      if(!(*arbol)->izquierda->izquierda){
-	if((*arbol)->izquierda->derecha){
-	  swap(*padre, (*arbol)->izquierda->derecha);	  
-	}
-	else swap(*padre, (*arbol)->izquierda);
-      }
-      else (*padre)->derecha = izquierda;
+    if((*padre)->izquierda && (*arbol)->clave == (*padre)->izquierda->clave){   
+      (*aux)->izquierda = izquierda;
     }
-    else (*padre)->izquierda = izquierda;
+    else if((*padre)->derecha && (*arbol)->clave == (*padre)->derecha->clave) (*padre)->derecha = izquierda;
+    else *aux = izquierda;
+    borrar_nodo(nodo_a_borrar);
     abb->cantidad_nodos--;
     return true;
   }//abb_nodo_t* nodo_a_borrar = *arbol;
@@ -205,7 +191,6 @@ void *abb_borrar(abb_t *abb, const char *clave){
   if (!(*arbol)) return NULL;
   void* dato_salida = (*arbol)->dato;
   abb_nodo_t** padre_nodo = arbol_p(&abb->raiz, (*arbol)->clave, abb->cmp);
-  //if (*padre_nodo == *arbol) swap();
   if(acomodar_caso2(arbol, abb, padre_nodo))
     return dato_salida;
   
@@ -256,7 +241,6 @@ size_t abb_cantidad(const abb_t *arbol){
 
 void abb_destruir(abb_t *abb){
   while(abb->cantidad_nodos != 0){
-    printf("clave a borrar raiz %s \n", abb->raiz->clave);
     void* aux= abb_borrar(abb, abb->raiz->clave);   
     if(abb->destruir_dato) abb->destruir_dato(aux);
   }

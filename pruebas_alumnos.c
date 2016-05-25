@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "testing.h"
 #include <time.h>
-#define TAM 5000
+#define TAM 40000
 
 int comparar(const char* cadena1, const char* cadena2){
   long int cad1, cad2;
@@ -168,7 +168,7 @@ void pruebas_guardar_borrar(){
   abb_borrar(abb, "60");
   abb_borrar(abb, "50");
 
-  
+  printf("CANTIDAD HASTA ANTES DE INSERTAR DEL FALLO ES %zu\n", abb_cantidad(abb));
   print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
   print_test("abb insertar ", abb_guardar(abb, "60", &c2));
   print_test("abb insertar ", abb_guardar(abb, "50", &c3));
@@ -281,9 +281,9 @@ void pruebas_volumen(){
 void prueba_auxiliar(){
   abb_t* abb = abb_crear(comparar, NULL);
   size_t a = 50, b = 25, c=10;
-  print_test("guardar",abb_guardar(abb, "10", &a ));
+  print_test("guardar",abb_guardar(abb, "50", &a ));
   print_test("wardar",abb_guardar(abb, "25", &b));
-  print_test("wardiola",abb_guardar(abb, "50", &c));
+  print_test("wardiola",abb_guardar(abb, "10", &c));
   //abb_borrar(abb, "10");
   printf("cantidad es %zu \n", abb_cantidad(abb));
   //abb_borrar(abb, "25");
@@ -295,10 +295,10 @@ void prueba_auxiliar(){
   abb_destruir(abb);
 }
 void pruebas_abb_alumno(){
-  //pruebas_vacia();
-  //pruebas_guardar_borrar();
-   //pruebas_iter();
-   //   pruebas_volumen();
+  pruebas_vacia();
+  pruebas_guardar_borrar();
+  pruebas_iter();
+  pruebas_volumen();
    prueba_auxiliar();
  }
 
