@@ -213,19 +213,14 @@ void *abb_obtener(const abb_t *abb, const char *clave){
   if (abb->cantidad_nodos == 0) return NULL;
   abb_nodo_t* raiz = abb->raiz;
   abb_nodo_t** arbol = buscar_arbol(clave, &raiz, abb->cmp);
-  if (*arbol){
-    return  raiz->dato;
-  }  
-  return NULL;
+  return *arbol ? (*arbol)->dato : NULL; 
 }
 
 bool abb_pertenece(const abb_t *abb, const char *clave){
   if (abb->cantidad_nodos == 0) return false;
   abb_nodo_t* raiz = abb->raiz;
   abb_nodo_t** arbol = buscar_arbol(clave, &raiz, abb->cmp);
-  if (*arbol) return true;
-  return false;
-
+  return *arbol ? (*arbol)->dato : NULL;
 }
 
 size_t abb_cantidad(const abb_t *arbol){
