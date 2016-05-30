@@ -5,8 +5,7 @@
 #include <stdio.h>
 #include "testing.h"
 #include <time.h>
-#define TAM 40000
-#define pt print_test
+#define TAM 9000
 
 int comparar(const char* cadena1, const char* cadena2){
   long int cad1, cad2;
@@ -20,7 +19,7 @@ int comparar(const char* cadena1, const char* cadena2){
 char** crear_vector_cadenas(size_t largo){
   size_t a, r ;
   char cad[13];
-  srand(time(NULL));
+  srand((unsigned int)time(NULL));
   char** vector = malloc(sizeof(char*) * largo);
   for( a = 0; a < largo; a++){
     r = rand();
@@ -52,12 +51,89 @@ void pruebas_vacia(){
   
 }
 
-void pruebas_guardar_borrar(){
+void pruebas_guardar(){
   
   abb_t* abb = abb_crear(comparar, NULL);
   
   int c1 = 14, c2 = 95, c3 = 11, c4 = 46, c5 = 85, c6 = 90, c7 = 3;
+  printf("Insercion de distintos arboles\n");
+  print_test("abb vacio creado", abb);
+  print_test("abb insertar 14 ", abb_guardar(abb, "14", &c1));
+  print_test("14 pertenece",abb_pertenece(abb, "14"));
+  print_test("cantidad es 1", abb_cantidad(abb) == 1 );
+  print_test("abb obtener clave 14 ", *(int*)abb_obtener(abb, "14")== c1);
+  print_test("abb insertar 95", abb_guardar(abb, "95", &c2));
+  print_test("95 pertenece", abb_pertenece(abb, "95"));
+  print_test("cantidad es 2", abb_cantidad(abb) == 2 );
+  print_test("abb obtener clave 95 ", *(int*)abb_obtener(abb, "95")== c2);
+  print_test("abb insertar 11", abb_guardar(abb, "11", &c3));
+  print_test("11 pertenece",abb_pertenece(abb, "11"));
+  print_test("cantidad es 3", abb_cantidad(abb) == 3 );
+  print_test("abb obtener clave 11 ", *(int*)abb_obtener(abb, "11")== c3);
+  print_test("abb insertar 46", abb_guardar(abb, "46", &c4));
+  print_test("46 pertenece",abb_pertenece(abb, "46"));
+  print_test("cantidad es 4", abb_cantidad(abb) == 4 );
+  print_test("abb obtener clave 46 ", *(int*)abb_obtener(abb, "46")== c4);
+  print_test("abb insertar 85", abb_guardar(abb, "85", &c5));
+  print_test("abb insertar 90", abb_guardar(abb, "90", &c6));
+  print_test("abb insertar 3", abb_guardar(abb, "3", &c7));
+  print_test("cantidad elementos es 7", abb_cantidad(abb) == 7);
+  
+  abb_destruir(abb);
+  print_test("arbol destruido", true);
+  
+  abb = abb_crear(comparar, NULL);
+  
+  c1 = 50; c2 = 75; c3 = 25; c4 = 10; c5 = 34; c6 = 64; c7 = 90;
   // 14  95  11  46  85  90 3
+  print_test("abb vacio creado", abb);
+  print_test("abb insertar 50 ", abb_guardar(abb, "50", &c1));
+  print_test("abb insertar 75", abb_guardar(abb, "75", &c2));
+  print_test("abb insertar 25", abb_guardar(abb, "25", &c3));
+  print_test("abb insertar 10", abb_guardar(abb, "10", &c4));
+  print_test("abb insertar 34", abb_guardar(abb, "34", &c5));
+  print_test("abb insertar 64", abb_guardar(abb, "64", &c6));
+  print_test("abb insertar 90", abb_guardar(abb, "90", &c7));
+  print_test("cantidad elementos es 7", abb_cantidad(abb) == 7);
+  
+  //print_test("")
+  abb_destruir(abb);
+  print_test("arbol destruido", true);
+  
+  c1 = 15; c2 = 23; c3 = 50; c4 = 40; c5 = 32; c6 = 45; c7 = 90;
+  abb = abb_crear(comparar, NULL);
+  print_test("abb insertar 15 ", abb_guardar(abb, "15", &c1));
+  print_test("abb insertar 23", abb_guardar(abb, "23", &c2));
+  print_test("abb insertar 50", abb_guardar(abb, "50", &c3));
+  print_test("abb insertar 40", abb_guardar(abb, "40", &c4));
+  print_test("abb insertar 32", abb_guardar(abb, "32", &c5));
+  print_test("abb insertar 45", abb_guardar(abb, "45", &c6));
+  
+  abb_destruir(abb);
+  
+  abb = abb_crear(comparar, NULL);
+  print_test("abb insertar  ", abb_guardar(abb, "15", &c1));
+  print_test("abb insertar ", abb_guardar(abb, "23", &c2));
+  print_test("abb insertar ", abb_guardar(abb, "50", &c3));
+  print_test("abb insertar ", abb_guardar(abb, "50", &c3));
+  print_test("abb insertar ", abb_guardar(abb, "70", &c3));
+  
+  abb_destruir(abb);
+  
+  abb = abb_crear(comparar, free);
+  
+  int* i1 = malloc(sizeof(int));
+  * i1 = 3;
+  //i1 = &i2;
+  abb_guardar(abb, "14", i1);
+
+  abb_destruir(abb);
+}
+
+void pruebas_borrar(){
+  abb_t* abb = abb_crear(comparar, NULL);
+  
+  int c1 = 14, c2 = 95, c3 = 11, c4 = 46, c5 = 85, c6 = 90, c7 = 3;
   print_test("abb vacio creado", abb);
   print_test("abb insertar 14 ", abb_guardar(abb, "14", &c1));
   print_test("abb insertar 95", abb_guardar(abb, "95", &c2));
@@ -67,7 +143,7 @@ void pruebas_guardar_borrar(){
   print_test("abb insertar 90", abb_guardar(abb, "90", &c6));
   print_test("abb insertar 3", abb_guardar(abb, "3", &c7));
   print_test("cantidad elementos es 7", abb_cantidad(abb) == 7);
-  
+
   print_test("abb borrar clave 14  devuelve 14", *(int*)abb_borrar(abb, "14")== c1);
   print_test("clave 14 ya no pertenece ", !abb_pertenece(abb, "14"));
   print_test("abb borrar clave 95 devuelve 95", *(int*)abb_borrar(abb, "95") == c2);
@@ -90,93 +166,70 @@ void pruebas_guardar_borrar(){
   abb_destruir(abb);
   
   abb = abb_crear(comparar, NULL);
+  print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
+  print_test("abb insertar ", abb_guardar(abb, "30", &c2));
+  print_test("abb insertar ", abb_guardar(abb, "20", &c3));
   
-  c1 = 50; c2 = 75; c3 = 25; c4 = 10; c5 = 34; c6 = 64; c7 = 90;
-  // 14  95  11  46  85  90 3
-  print_test("abb vacio creado", abb);
-  print_test("abb insertar 50 ", abb_guardar(abb, "50", &c1));
-  print_test("abb insertar 75", abb_guardar(abb, "75", &c2));
-  print_test("abb insertar 25", abb_guardar(abb, "25", &c3));
-  print_test("abb insertar 10", abb_guardar(abb, "10", &c4));
-  print_test("abb insertar 34", abb_guardar(abb, "34", &c5));
-  print_test("abb insertar 64", abb_guardar(abb, "64", &c6));
-  print_test("abb insertar 90", abb_guardar(abb, "90", &c7));
-  print_test("cantidad elementos es 7", abb_cantidad(abb) == 7);
-  
-  //print_test("")
-  abb_destruir(abb);
-  c1 = 15; c2 = 23; c3 = 50; c4 = 40; c5 = 32; c6 = 45; c7 = 90;
-  abb = abb_crear(comparar, NULL);
-  print_test("abb insertar 15 ", abb_guardar(abb, "15", &c1));
-  print_test("abb insertar 23", abb_guardar(abb, "23", &c2));
-  print_test("abb insertar 50", abb_guardar(abb, "50", &c3));
-  print_test("abb insertar 40", abb_guardar(abb, "40", &c4));
-  print_test("abb insertar 32", abb_guardar(abb, "32", &c5));
-  print_test("abb insertar 45", abb_guardar(abb, "45", &c6));
-  abb_borrar(abb, "15");
-  
-  abb_destruir(abb);
-  
-  abb = abb_crear(comparar, NULL);
-  print_test("abb insertar  ", abb_guardar(abb, "15", &c1));
-  print_test("abb insertar ", abb_guardar(abb, "23", &c2));
-  print_test("abb insertar ", abb_guardar(abb, "50", &c3));
-  abb_borrar(abb, "50");
-  print_test("abb insertar ", abb_guardar(abb, "50", &c3));
-  abb_borrar(abb, "23");
-  print_test("abb insertar ", abb_guardar(abb, "70", &c3));
-  abb_borrar(abb, "15");
-  abb_borrar(abb, "70");
-  abb_borrar(abb, "50");
+  print_test("abb borrar", *(int*)abb_borrar(abb, "40") == c1);
+  print_test(" borrado ya no pertenece", !abb_pertenece(abb, "40"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "30") == c2);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "30"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "20") == c3);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "20"));
   
   print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
   print_test("abb insertar ", abb_guardar(abb, "30", &c2));
   print_test("abb insertar ", abb_guardar(abb, "20", &c3));
   
-  abb_borrar(abb, "40");
-  abb_borrar(abb, "30");
-  abb_borrar(abb, "20");
-  
-  print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
-  print_test("abb insertar ", abb_guardar(abb, "30", &c2));
-  print_test("abb insertar ", abb_guardar(abb, "20", &c3));
-  
-  abb_borrar(abb, "30");
-  abb_borrar(abb, "40");
-  abb_borrar(abb, "20");
+  print_test("abb borrar ", *(int*)abb_borrar(abb, "30")==c2);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "30"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "40") == c1);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "40"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "20")==c3);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "20"));
 
   print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
   print_test("abb insertar ", abb_guardar(abb, "60", &c2));
   print_test("abb insertar ", abb_guardar(abb, "20", &c3));
 
-  abb_borrar(abb, "60");
-  abb_borrar(abb, "40");
-  abb_borrar(abb, "20");
-
+  print_test("abb borrar", *(int*)abb_borrar(abb, "60")==c2);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "60"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "40")==c1);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "40"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "20")==c3);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "20"));
+  
   print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
   print_test("abb insertar ", abb_guardar(abb, "60", &c2));
   print_test("abb insertar ", abb_guardar(abb, "20", &c3));
   
-  abb_borrar(abb, "40");
-  abb_borrar(abb, "60");
-  abb_borrar(abb, "20");
+  print_test("abb borrar", *(int*)abb_borrar(abb, "40")==c1);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "40"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "60")==c2);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "60"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "20")== c3);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "20"));
+  
+  print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
+  print_test("abb insertar ", abb_guardar(abb, "60", &c2));
+  print_test("abb insertar ", abb_guardar(abb, "50", &c3));
+  
+  print_test("abb borrar", *(int*)abb_borrar(abb, "40")==c1);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "40"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "60")==c2);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "60"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "50")==c3);
 
   print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
   print_test("abb insertar ", abb_guardar(abb, "60", &c2));
   print_test("abb insertar ", abb_guardar(abb, "50", &c3));
   
-  abb_borrar(abb, "40");
-  abb_borrar(abb, "60");
-  abb_borrar(abb, "50");
-
-  printf("CANTIDAD HASTA ANTES DE INSERTAR DEL FALLO ES %zu\n", abb_cantidad(abb));
-  print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
-  print_test("abb insertar ", abb_guardar(abb, "60", &c2));
-  print_test("abb insertar ", abb_guardar(abb, "50", &c3));
-  
-  abb_borrar(abb, "60");
-  abb_borrar(abb, "40");
-  abb_borrar(abb, "50");
+  print_test("abb borrar", *(int*)abb_borrar(abb, "60")==c2);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "60"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "40")==c1);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "40"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "50")==c3);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "50"));
 
   print_test("abb insertar  ", abb_guardar(abb, "50", &c1));
   print_test("abb insertar ", abb_guardar(abb, "60", &c2));
@@ -186,9 +239,12 @@ void pruebas_guardar_borrar(){
   print_test("abb insertar ", abb_guardar(abb, "64", &c3));
   print_test("abb insertar  ", abb_guardar(abb, "40", &c3));
 
-  abb_borrar(abb, "50");
-  abb_borrar(abb, "60");
-  abb_borrar(abb, "70");
+  print_test("abb borrar", *(int*)abb_borrar(abb, "50")==c1);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "50"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "60")==c2);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "60"));
+  print_test("abb borrar", *(int*)abb_borrar(abb, "70")==c3);
+  print_test("borrado ya no pertenece", !abb_pertenece(abb, "70"));
 
   abb_destruir(abb);
   abb = abb_crear(comparar, free);
@@ -198,21 +254,23 @@ void pruebas_guardar_borrar(){
   abb_guardar(abb, "14", i1);
 
   abb_destruir(abb);
+
 }
 
-bool imprimir_elementos(const char*clave, void* dato, void* extra){
-  //print_test("clave : ", strcmp(clave, (char*)extra) == 0);
-  printf("dato : %d\n\n",*(int*)dato);
+
+bool contar_elementos(const char*clave, void* dato, void* extra){
+  size_t* a = extra; 
+  print_test("clave encontrada", clave);
+  if(clave) *a = *a+1;
   return true;
 }
 
-bool esta_elemento(const char*clave, void* dato, void* extra){
-  printf("elemento actual %s \n", clave);
-  if(comparar(clave, (char*)extra) == 0){
-    printf("elemento encontrado \n");
+bool buscar_tres(const char*clave, void* dato, void* extra){
+  size_t* num = extra;
+  if(*(int*)dato == 3){ 
     return false; 
   }
-  //printf("elemento no encontrado \n");
+  *num = *num+1;
   return true;
 }
 
@@ -222,13 +280,13 @@ void pruebas_iter(){
   int c1 = 1 , c2 = 2, c3 = 3;
 
   print_test("abb insertar  ", abb_guardar(abb, "50", &c1));
-  print_test("abb insertar ", abb_guardar(abb, "60", &c2));
+  print_test("abb insertar ", abb_guardar(abb, "60", &c3));
   print_test("abb insertar ", abb_guardar(abb, "70", &c3));
-  print_test("abb insertar  ", abb_guardar(abb, "65", &c1));
+  print_test("abb insertar ", abb_guardar(abb, "65", &c1));
   print_test("abb insertar ", abb_guardar(abb, "63", &c2));
-  print_test("abb insertar ", abb_guardar(abb, "64", &c3));
-  print_test("abb insertar  ", abb_guardar(abb, "40", &c3));
-
+  print_test("abb insertar ", abb_guardar(abb, "64", &c1));
+  print_test("abb insertar  ", abb_guardar(abb, "40", &c1));
+  // 40 50 60 63 64 65 70 
   abb_iter_t* iter = abb_iter_in_crear(abb);
   
   print_test("abb iter no esta al final", !abb_iter_in_al_final(iter));
@@ -246,9 +304,14 @@ void pruebas_iter(){
   print_test("abb iter avanzar es true", abb_iter_in_avanzar(iter));
   print_test("abb iter ver actual es clave: 70", comparar(abb_iter_in_ver_actual(iter), "70") == 0);
   print_test("abb iter avanzar es false", abb_iter_in_avanzar(iter));
-
-  abb_in_order(abb, imprimir_elementos, NULL);
-  abb_in_order(abb, esta_elemento, "60");
+  size_t a = 0;
+  abb_in_order(abb, contar_elementos, &a);
+  print_test("Cantidad iterada correctamente", a == 7);
+  printf("cantidad real %zu\n",a);
+  a = 0;
+  abb_in_order(abb, buscar_tres, &a);
+  print_test("posicion del primer 3 correcta", a == 2);
+  printf("POSCIION REAL %zu \n", a);
   abb_iter_in_destruir(iter);
   abb_destruir(abb);
    
@@ -268,42 +331,21 @@ void pruebas_volumen(){
   }
   print_test("muchos elementos guardados", ok);
   print_test("La cantidad guardada es correcta", abb_cantidad(abb) == cantidad_guardados);
-  /*  for( a =0; a < TAM; a++){
-    ok = abb_borrar(abb, vector[a]) == &a ? true : false;
-    if(!ok) break;
-  }
-  
-  print_test("Todos los elementos fueron borrados con exito", ok);
-  */
   abb_destruir(abb);
   liberar_cadenas(vector);  
 }
 
-void prueba_auxiliar(){
-  abb_t* abb = abb_crear(comparar, NULL);
-  size_t a = 50, b = 25, c=10;
-  print_test("guardar",abb_guardar(abb, "50", &a ));
-  print_test("wardar",abb_guardar(abb, "25", &b));
-  print_test("wardiola",abb_guardar(abb, "10", &c));
-  //abb_borrar(abb, "10");
-  printf("cantidad es %zu \n", abb_cantidad(abb));
-  //abb_borrar(abb, "25");
-  //printf("cantidad es %zu \n", abb_cantidad(abb));
-  //abb_borrar(abb, "50");
-  
-  printf("cantidad es %zu \n", abb_cantidad(abb));
 
-  abb_destruir(abb);
-}
 void pruebas_abb_alumno(){
   pruebas_vacia();
-  pruebas_guardar_borrar();
+  pruebas_guardar();
+  pruebas_borrar();
   pruebas_iter();
   pruebas_volumen();
-   prueba_auxiliar();
- }
+}
 
- int main(){
+ 
+int main(){
   clock_t inicio = clock();
   pruebas_abb_alumno();
   
